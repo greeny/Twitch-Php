@@ -1,0 +1,22 @@
+{
+    "name": "greeny/twitch-php",
+    "description": "Twitch.tv API integration in PHP.",
+    "homepage": "http://blatny.org",
+    "type": "project",
+    "license": ["MIT"],
+    "authors": [
+        {
+            "name": "Tomáš Blatný",
+            "homepage": "http://blatny.org"
+        }
+    ],
+    "require": {
+        "php": ">= 5.3.0"
+    },
+    "require-dev": {
+        "nette/tester": "~0.9.5"
+    },
+    "autoload": {
+        "files": ["Twitch/loader.php"]
+    }
+}

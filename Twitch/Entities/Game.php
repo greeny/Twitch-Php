@@ -36,7 +36,9 @@ class Game extends Entity {
 			$this->box = $data->box;
 			$this->logo = $data->logo;
 			$this->id = $data->_id;
-			$this->viewers = $data->viewers;
+			$this->viewers = isset($data->viewers) ? $data->viewers : NULL;
+			$this->channels = isset($data->channels) ? $data->channels : NULL;
+			$this->popularity = isset($data->popularity) ? $data->popularity : NULL;
 		}
 		parent::__construct($api, $data);
 	}

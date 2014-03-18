@@ -260,6 +260,10 @@ class Api {
 		return $emoticons;
 	}
 
+	/**
+	 * @param int $page
+	 * @return Game[]
+	 */
 	public function getGames($page = 1)
 	{
 		$response = $this->sendRequest('games/top', self::METHOD_GET, array(), $this->buildPageArgs($page));

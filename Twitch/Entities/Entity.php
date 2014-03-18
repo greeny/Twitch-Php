@@ -26,5 +26,19 @@ class Entity {
 	{
 		return $this->data;
 	}
+
+	/**
+	 * @param $key
+	 * @return mixed
+	 * @throws \LogicException
+	 */
+	public function __get($key)
+	{
+		if(method_exists($this, $name = 'get'.ucfirst($key))) {
+			return $this->$name();
+		} else {
+			throw new \LogicException("Access to undefined property '$key'.");
+		}
+	}
 }
  

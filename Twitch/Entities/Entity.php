@@ -11,6 +11,7 @@ class Entity {
 	/** @var \stdClass */
 	protected $data = NULL;
 
+	/** @var \greeny\Twitch\Api */
 	protected $api;
 
 	public function __construct(Api $api, $data)

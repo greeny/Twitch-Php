@@ -75,7 +75,7 @@ class Api {
 			$search['channel'] = implode(',', $ch);
 		}
 
-		$response = $this->sendRequest('streams', self::METHOD_GET, array(), array_merge($search, $this->buildPageArgs($page)));
+		$response = $this->sendRequest('streams', array_merge($search, $this->buildPageArgs($page)));
 		$streams = array();
 		foreach($response->streams as $stream) {
 			$streams[] = new Stream($this, $stream);
@@ -89,7 +89,7 @@ class Api {
 	 */
 	public function getFeaturedStreams($page = 1)
 	{
-		$response = $this->sendRequest('streams/featured', self::METHOD_GET, array(), $this->buildPageArgs($page));
+		$response = $this->sendRequest('streams/featured', $this->buildPageArgs($page));
 		$streams = array();
 		foreach($response->featured as $featured) {
 			$streams[] = new FeaturedStream($this, $featured);
@@ -124,7 +124,7 @@ class Api {
 	 */
 	public function getTeams($page = 1)
 	{
-		$response = $this->sendRequest('teams', self::METHOD_GET, array(), $this->buildPageArgs($page));
+		$response = $this->sendRequest('teams', $this->buildPageArgs($page));
 		$teams = array();
 		foreach($response->teams as $team) {
 			$teams[] = new Team($this, $team);
@@ -155,7 +155,7 @@ class Api {
 		if($game !== NULL) {
 			$search['game'] = (string) $game;
 		}
-		$response = $this->sendRequest('videos/top', self::METHOD_GET, array(), array_merge($search, $this->buildPageArgs($page)));
+		$response = $this->sendRequest('videos/top', array_merge($search, $this->buildPageArgs($page)));
 		$videos = array();
 		foreach($response->videos as $video) {
 			$videos[] = new Video($this, $video);
@@ -173,7 +173,7 @@ class Api {
 		if($channelName instanceof Channel) {
 			$channelName = $channelName->getName();
 		}
-		$response = $this->sendRequest("channels/$channelName/videos", self::METHOD_GET, array(), $this->buildPageArgs($page));
+		$response = $this->sendRequest("channels/$channelName/videos", $this->buildPageArgs($page));
 		$videos = array();
 		foreach($response->videos as $video) {
 			$videos[] = new Video($this, $video);
@@ -191,7 +191,7 @@ class Api {
 		if($channelName instanceof Channel) {
 			$channelName = $channelName->getName();
 		}
-		$response = $this->sendRequest("channels/$channelName/follows", self::METHOD_GET, array(), $this->buildPageArgs($page));
+		$response = $this->sendRequest("channels/$channelName/follows", $this->buildPageArgs($page));
 		$users = array();
 		foreach($response->follows as $follow) {
 			$users[] = new User($this, $follow->user);
@@ -209,7 +209,7 @@ class Api {
 		if($userName instanceof User) {
 			$userName = $userName->getName();
 		}
-		$response = $this->sendRequest("users/$userName/follows/channels", self::METHOD_GET, array(), $this->buildPageArgs($page));
+		$response = $this->sendRequest("users/$userName/follows/channels", $this->buildPageArgs($page));
 		$channels = array();
 		foreach($response->follows as $follow) {
 			$channels[] = new Channel($this, $follow->channel);
@@ -266,7 +266,7 @@ class Api {
 	 */
 	public function getGames($page = 1)
 	{
-		$response = $this->sendRequest('games/top', self::METHOD_GET, array(), $this->buildPageArgs($page));
+		$response = $this->sendRequest('games/top', $this->buildPageArgs($page));
 		$games = array();
 		foreach($response->top as $game) {
 			$games[] = new Game($this, $game->game);
@@ -302,7 +302,7 @@ class Api {
 	 */
 	public function searchGames($query)
 	{
-		$response = $this->sendRequest('search/games', self::METHOD_GET, array(), array(
+		$response = $this->sendRequest('search/games', array(
 			'query' => Helpers::encodeQuery($query),
 			'type' => 'suggest',
 		));
@@ -320,7 +320,7 @@ class Api {
 	 */
 	public function searchStreams($query, $page = 1)
 	{
-		$response = $this->sendRequest('search/streams', self::METHOD_GET, array(), array_merge(array('query' => Helpers::encodeQuery($query)), $this->buildPageArgs($page)));
+		$response = $this->sendRequest('search/streams', array_merge(array('query' => Helpers::encodeQuery($query)), $this->buildPageArgs($page)));
 		$streams = array();
 		foreach($response->games as $stream) {
 			$streams[] = new Stream($this, $stream);
@@ -344,9 +344,9 @@ class Api {
 	 * @throws ApiException
 	 * @return \stdClass
 	 */
-	protected function sendRequest($request, $method = self::METHOD_GET, $headers = array(), $args = array())
+	protected function sendRequest($request, $args = array(), $method = self::METHOD_GET, $headers = array())
 	{
-		return $this->sendUrlRequest(self::$api . $request, $method, $headers, $args);
+		return $this->sendUrlRequest(self::$api . $request, $args, $method, $headers);
 	}
 
 	/**
@@ -357,7 +357,7 @@ class Api {
 	 * @throws ApiException
 	 * @return \stdClass
 	 */
-	protected function sendUrlRequest($request, $method = self::METHOD_GET, $headers = array(), $args = array())
+	protected function sendUrlRequest($request, $args = array(), $method = self::METHOD_GET, $headers = array())
 	{
 		$context = array(
 			'http' => array(
